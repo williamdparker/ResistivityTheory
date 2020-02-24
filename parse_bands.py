@@ -1,13 +1,13 @@
 
 import numpy as np
 import re
-# import matplotlib as mpl
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-# mpl.rcParams['text.usetex'] = True
+mpl.rc('font', family='serif', serif='cm10', size=20)
+mpl.rcParams['text.usetex'] = True
 # mpl.rcParams['font.sans-serif'] = "cmr10"
-
-THz_per_inverse_cm = 0.02998
+# mpl.rcParams['text.latex.preamble'] = [r'\boldmath']
 
 # Get the number of bands and k-points per band, then the frequencies for each k-point
 
@@ -80,7 +80,8 @@ while index < number_of_high_symmetry_points-1:
 kpoint_plotvalues = np.append(kpoint_plotvalues, float(kpoint_mappings[-1]))
 
 # Label high-symmetry points
-high_symmetry_kpoint_labels = ['Γ', 'X', 'W', 'K', 'Γ', 'L', 'U', 'W', 'L', 'K | U', '', 'Γ']
+# high_symmetry_kpoint_labels = ['Γ', 'X', 'W', 'K', 'Γ', 'L', 'U', 'W', 'L', 'K | U', '', 'Γ']  # Unicode
+high_symmetry_kpoint_labels = [r'$\Gamma$', 'X', 'W', 'K', r'$\Gamma$', 'L', 'U', 'W', 'L', 'K U', '', r'$\Gamma$'] # LaTeX
 plt.xticks(kpoint_mappings, high_symmetry_kpoint_labels)
 
 # Draw light vertical lines at high-symmetry points
@@ -98,6 +99,9 @@ plt.axis([kpoint_plotvalues[0], kpoint_plotvalues[-1], np.amin(bands), -np.amin(
 plt.axhline(0.0, color ='black', linestyle='--')
 whitespace_shift = 0.01 * (kpoint_plotvalues[-1] - kpoint_plotvalues[0])
 plt.text(kpoint_plotvalues[-1] + whitespace_shift, 0.0, r'$E_F$', verticalalignment='center')
+
+# Set the plot title
+plt.title('Kohn-Sham bands for fcc Cu using LDA-PZ exchange-correlation')
 
 # Make the bands plot
 for band_index in range(0, number_of_bands-1):
