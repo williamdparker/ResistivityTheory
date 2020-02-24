@@ -18,10 +18,16 @@ with open(filename) as bandfile:
     number_of_kpoints = int(first_line.split()[4])
     bands = np.zeros((number_of_bands, number_of_kpoints))
 
+    kpoint_index = 0
     for line_index, line in enumerate(bandfile.readlines()):
-        if line_index % 2 != 0:
-            kpoint_index = int(line_index/2)
-            bands[:, kpoint_index] = line.split()
+        if kpoint_index == number_of_kpoints:
+            break
+        if line_index % 3 == 2:
+            bands[0:9, kpoint_index] = line.split()
+        if line_index % 3 == 0:
+            bands[10, kpoint_index] = line.split()[0]
+            kpoint_index += 1
+
 
 
 print("{} bands found for {} k-points".format(number_of_bands, number_of_kpoints))
@@ -40,7 +46,7 @@ print("{} bands found for {} k-points".format(number_of_bands, number_of_kpoints
 # Make the bands plot
 
 for band_index in range(0, number_of_bands-1):
-    plt.plot(kpoint_plotvalues, bands[band_index] * THz_per_inverse_cm)
+    plt.plot(kpoint_plotvalues, bands[band_index])
 
 plt.show()
 
