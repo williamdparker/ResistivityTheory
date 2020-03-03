@@ -4,8 +4,8 @@ import re
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-mpl.rc('font', family='serif', serif='cm10', size=20)
-mpl.rcParams['text.usetex'] = True
+# mpl.rc('font', family='serif', serif='cm10', size=20)
+# mpl.rcParams['text.usetex'] = True
 # mpl.rcParams['font.sans-serif'] = "cmr10"
 # mpl.rcParams['text.latex.preamble'] = [r'\boldmath']
 
