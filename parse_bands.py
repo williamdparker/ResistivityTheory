@@ -4,10 +4,12 @@ import re
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-mpl.rc('font', family='serif', serif='cm10', size=20)
 mpl.rcParams['text.usetex'] = True
-# mpl.rcParams['font.sans-serif'] = "cmr10"
-# mpl.rcParams['text.latex.preamble'] = [r'\boldmath']
+# Font settings for presentation slide graphics
+mpl.rcParams['font.serif'] = "Times"
+mpl.rcParams['font.family'] = "serif"
+mpl.rcParams['font.size'] = 18
+
 
 # Get the number of bands and k-points per band, then the frequencies for each k-point
 
