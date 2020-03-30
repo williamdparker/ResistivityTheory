@@ -4,14 +4,16 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from scipy.special import lambertw
 
+fudge_factor = 1. + 0.0e-6
+
 # File from which to read data (should contain only [ecutwfc] [total energy])
 filename = 'Cu.Fm-3m.PZ.ecutwfc_totalenergy.dat'
 
 # Range over which to plot
-total_energy_range = 0.100  # eV
+total_energy_range = 1.e-1  # eV
 
 # Data selection index
-starting_data_index = 3
+starting_data_index = 5
 
 # 1/x^(exponent) fit
 exponent = 1
@@ -92,7 +94,7 @@ deltax12 = x1 - x2
 # print(inverse_power_convergence_fit_parameters)
 
 # Exponential-inverse power fit
-c3 = total_energies[-1]  # Same as exponential fit
+c3 = total_energies[-1]*fudge_factor   # Same as exponential fit
 # product_log_argument = -x2 * np.exp(-2. + x1 / x2) / x1
 # c2 = np.abs((-x1 + (2. * x2) + (x2 * lambertw(product_log_argument))) / ((x1 - x2) * x2))
 # c1 = (deltay12 / deltax12) * np.exp(c2 * x2) * ((-c2 / x1) - (1. / x2))
@@ -135,6 +137,6 @@ exponential_inverse_power_label = r'${:.1f} \exp({:.1f}x) / x + {:.1f}$'.format(
 plt.plot(fit_ecutwfc, exponential_inverse_power_fit_total_energies)
 plt.axhline(c3, linestyle='--', color='black')
 plt.scatter(ecutwfc, total_energies)
-plt.legend()
+# plt.legend()
 plt.tight_layout()
 plt.show()

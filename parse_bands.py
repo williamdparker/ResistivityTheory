@@ -107,7 +107,7 @@ plt.title('Kohn-Sham bands for fcc Cu using LDA-PZ exchange-correlation')
 
 # Make the bands plot
 for band_index in range(0, number_of_bands-1):
-    plt.plot(kpoint_plotvalues, bands[band_index]) # WARNING: ASSUMING BANDS ARE ORDERED BY ENERGY, SHOULD USE .RAP FILE
+    plt.plot(kpoint_plotvalues, bands[band_index], color='green') # WARNING: ASSUMING BANDS ARE ORDERED BY ENERGY, SHOULD USE .RAP FILE
 plt.show()
 
 
