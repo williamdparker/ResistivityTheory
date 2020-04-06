@@ -13,6 +13,7 @@ mpl.rcParams['font.size'] = 18
 
 # Simulation system description
 structure_name = 'Fm-3m'
+number_of_atoms = 1
 chemical_formula = 'Cu'
 exchange_correlation = 'PZ'
 filename = chemical_formula + '.' + structure_name + '.' + exchange_correlation + '.volume_total_energy.dat'
@@ -20,7 +21,7 @@ filename = chemical_formula + '.' + structure_name + '.' + exchange_correlation 
 # Parameters
 number_of_fit_volumes = 50
 
-# Import data from file     (assuming units of Å^3/atom, eV/atom)
+# Import data from file     (assuming units of bohr^3, Ry)
 simulation_volumes = []
 simulation_total_energies = []
 with open(filename) as eos_file:
@@ -28,7 +29,13 @@ with open(filename) as eos_file:
         simulation_volumes.append(float(line.split()[0]))
         simulation_total_energies.append(float(line.split()[1]))
 
-simulation_volumes = simulation_volumes * 1e-30  # convert Å^3 to m^3
+simulation_volumes = simulation_volumes * np.power(0.529177, 3) * 1e-30  # convert Å^3 to m^3
+simulation_total_energies = simulation_total_energies * 27.211385 / 2   # convert Ry to eV
+
+# Convert to units per atom
+simulation_volumes, simulation_total_energies = simulation_volumes/number_of_atoms, \
+                                                simulation_total_energies/number_of_atoms
+
 
 # from Cohen et al. (2000) Accuracy of equation-of-state formulations
 #

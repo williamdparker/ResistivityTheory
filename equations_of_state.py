@@ -54,7 +54,7 @@ def vinet(parameters, volumes):
     """
     k0pm1 = parameters[2] - 1  # K_0' - 1
     k0pm1_squared = np.power(k0pm1, 2)
-    reduced_volume_lengths = np.power(volumes / parameters[3], 1/3)
+    reduced_volume_lengths = np.power(volumes / parameters[3], 1 / 3)
     return parameters[0] + (4. * parameters[1] * parameters[3] / k0pm1_squared) \
                          + (2. * parameters[1] * parameters[3] / k0pm1_squared) * \
                            (5. + 3. * parameters[2] * (reduced_volume_lengths - 1.) - 3. * reduced_volume_lengths) * \
