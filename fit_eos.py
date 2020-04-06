@@ -13,13 +13,10 @@ def fit_eos(volumes, total_energies, fit_function, maximum_number_of_iterations=
     #   parameter[0] = E_0 -- choose minimum of total_energies to start
     initial_parameters = [np.amin(total_energies)]
 
-    #   parameter[1] = V_0 -- choose volume corresponding to minimum energy to start
-    minimum_energy_index = np.argmin(total_energies)
-    initial_parameters.append(volumes[minimum_energy_index])
-
-    #   parameter[2] = K_0 -- choose curvature around minimum energy to start
+    #   parameter[1] = K_0 -- choose curvature around minimum energy to start
     #       K_0 = d2E / (dV)^2
     #       pick data point closest to minimum in energy
+    minimum_energy_index = np.argmin(total_energies)
     if total_energies[minimum_energy_index+1] < total_energies[minimum_energy_index-1]:
         energy_difference = total_energies[minimum_energy_index + 1] - total_energies[minimum_energy_index]
         volume_difference = volumes[minimum_energy_index + 1] - volumes[minimum_energy_index]
@@ -29,8 +26,12 @@ def fit_eos(volumes, total_energies, fit_function, maximum_number_of_iterations=
     #       K_0 = 2 (E_1 - E_0) / (V_1 - V_0)^2
     initial_parameters.append(2 * energy_difference / np.power(volume_difference, 2))
 
-    #   parameter[3] = d K_0 / dP -- guess 1.0 -- NEED TO DERIVE BETTER STARTING POINT
+    #   parameter[2] = d K_0 / dP -- guess 1.0 -- NEED TO DERIVE BETTER STARTING POINT
     initial_parameters.append(1.0)
+
+    #   parameter[3] = V_0 -- choose volume corresponding to minimum energy to start
+
+    initial_parameters.append(volumes[minimum_energy_index])
 
     if fit_function == 'murnaghan':
         from equations_of_state import murnaghan
@@ -40,8 +41,9 @@ def fit_eos(volumes, total_energies, fit_function, maximum_number_of_iterations=
         from equations_of_state import birch_murnaghan
         parameters = fmin(square_differences, initial_parameters, args=(volumes, total_energies, birch_murnaghan),
                           maxiter=maximum_number_of_iterations)
-    elif fit_function == 'vinet':
+    elif fit_function == 'vinet' or fit_function.__name__ == 'vinet':
         from equations_of_state import vinet
+        print(initial_parameters)
         parameters = fmin(square_differences, initial_parameters, args=(volumes, total_energies, vinet),
                           maxiter=maximum_number_of_iterations)
     else:

@@ -4,7 +4,7 @@ import numpy as np
 from fit_eos import fit_eos
 
 # Use TeX fonts
-mpl.rcParams['text.usetex'] = True
+# mpl.rcParams['text.usetex'] = True
 
 # Font settings for presentation slide graphics
 mpl.rcParams['font.serif'] = "Times"
@@ -29,8 +29,9 @@ with open(filename) as eos_file:
         simulation_volumes.append(float(line.split()[0]))
         simulation_total_energies.append(float(line.split()[1]))
 
-simulation_volumes = simulation_volumes * np.power(0.529177, 3) * 1e-30  # convert Å^3 to m^3
-simulation_total_energies = simulation_total_energies * 27.211385 / 2   # convert Ry to eV
+simulation_volumes = np.asarray(simulation_volumes) * np.power(0.529177, 3) * 1e-30  # convert Å^3 to m^3
+# simulation_total_energies = np.asarray(simulation_total_energies) * 27.211385 / 2   # convert Ry to eV
+simulation_total_energies = np.asanyarray(simulation_total_energies) * 2.1798172e-18
 
 # Convert to units per atom
 simulation_volumes, simulation_total_energies = simulation_volumes/number_of_atoms, \
