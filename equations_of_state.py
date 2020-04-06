@@ -33,7 +33,7 @@ def birch_murnaghan(parameters, volumes):
     :param volumes: NumPy array of volumes per atom
     :return: NumPy array of the Birch-Murnaghan equation of state values at input volumes
     """
-    reduced_volume_area = np.power(volumes / parameters[3], -2 / 3)
+    reduced_volume_area = np.power(volumes / parameters[3], -2. / 3.)
     return parameters[0] + (9. * parameters[1] * parameters[3] / 16.) * (
             np.power(reduced_volume_area - 1., 3.) * parameters[2] +
             np.power(reduced_volume_area - 1., 2.) * (6. - 4. * reduced_volume_area))
@@ -41,10 +41,9 @@ def birch_murnaghan(parameters, volumes):
 
 def vinet(parameters, volumes):
     """
-    Vinet equation of state: E(V) = E_0 + (4 K_0 V_0 / (K_0' - 1)^2)
-                                        - (2 K_0 V_0 / (K_0' - 1)^2) (5 + 3 K_0' ((V / V_0)^(1/3) - 1)
-                                                                        - 3 (V / V_0)^(1/3))
-                                                                    exp(- (3/2) (K_0' - 1) (1 - (V / V_0)^(1/3)))
+    Vinet equation of state: E(V) = E_0 + (2 K_0 V_0 / (K_0' - 1)^2) *
+                                        - {2 - [5 + 3 (V / V_0)^(1/3) (K_0' - 1) - 3 K_0']
+                                               exp(- (3/2) (K_0' - 1) (1 - (V / V_0)^(1/3))})
     :param parameters: list of equation of state parameters     equilibrium energy (E_0),
                                                                 bulk modulus (K_0),
                                                                 bulk modulus pressure derivative (K_0'),
@@ -54,10 +53,11 @@ def vinet(parameters, volumes):
     """
     k0pm1 = parameters[2] - 1  # K_0' - 1
     k0pm1_squared = np.power(k0pm1, 2)
-    reduced_volume_lengths = np.power(volumes / parameters[3], 1 / 3)
-    return parameters[0] + (4. * parameters[1] * parameters[3] / k0pm1_squared) \
-                         + (2. * parameters[1] * parameters[3] / k0pm1_squared) * \
-                           (5. + 3. * parameters[2] * (reduced_volume_lengths - 1.) - 3. * reduced_volume_lengths) * \
-                           np.exp(-1.5 * k0pm1 * (reduced_volume_lengths - 1))
+    reduced_volume_lengths = np.power(volumes / parameters[3], 1. / 3.)
 
+    vinet_eos = parameters[0] + \
+                (2. * parameters[1] * parameters[3] / k0pm1_squared) * \
+                (2. - (5. + 3. * reduced_volume_lengths * k0pm1 - 3 * parameters[2]) *
+                 np.exp(-1.5 * k0pm1 * (reduced_volume_lengths - 1.)))
 
+    return vinet_eos

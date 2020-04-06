@@ -2,6 +2,8 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 from fit_eos import fit_eos
+from unit_conversions import cubic_bohr_to_cubic_meter, cubic_meter_to_cubic_angstrom
+from unit_conversions import joule_to_electron_volt, rydberg_to_joule
 
 # Use TeX fonts
 mpl.rcParams['text.usetex'] = True
@@ -20,6 +22,7 @@ filename = chemical_formula + '.' + structure_name + '.' + exchange_correlation 
 
 # Parameters
 number_of_fit_volumes = 50
+output_units = 'electron_volt_angstrom'  # eV-Å or J-m
 
 # Import data from file     (assuming units of bohr^3, Ry)
 simulation_volumes = []
@@ -29,13 +32,22 @@ with open(filename) as eos_file:
         simulation_volumes.append(float(line.split()[0]))
         simulation_total_energies.append(float(line.split()[1]))
 
-simulation_volumes = simulation_volumes * np.power(0.529177, 3) * 1e-30  # convert Å^3 to m^3
-simulation_total_energies = simulation_total_energies * 27.211385 / 2   # convert Ry to eV
+# Convert lists to NumPy arrays
+simulation_volumes = np.asarray(simulation_volumes)
+simulation_total_energies = np.asarray(simulation_total_energies)
+
+# Convert units
+simulation_volumes = simulation_volumes * cubic_bohr_to_cubic_meter
+simulation_total_energies = simulation_total_energies * rydberg_to_joule
 
 # Convert to units per atom
 simulation_volumes, simulation_total_energies = simulation_volumes/number_of_atoms, \
                                                 simulation_total_energies/number_of_atoms
 
+print("Simulation volumes (m^3/atom):")
+print(simulation_volumes)
+print("Simulation total energies (J/atom):")
+print(simulation_total_energies)
 
 # from Cohen et al. (2000) Accuracy of equation-of-state formulations
 #
@@ -61,13 +73,29 @@ elif fit_function == 'birch-murnaghan':
 elif fit_function == 'vinet':
     from equations_of_state import vinet
     parameters = fit_eos(simulation_volumes, simulation_total_energies, vinet)
+    print("Vinet equation of state parameters found:")
+    print("\tEquilibrium energy      (J/atom)   = {}".format(parameters[0]))
+    print("\tBulk modulus            (Pa)       = {}".format(parameters[1]))
+    print("\tBulk modulus derivative            = {}".format(parameters[2]))
+    print("\tEquilibrium volume      (m^3/atom) = {}".format(parameters[3]))
     fit_total_energies = vinet(parameters, fit_volumes)
 
 # Make plot
+# plt.title(r'Energy Equation of State for ' + structure_name + ' ' + chemical_formula)
+if output_units == 'joule_meter':
+    plt.xlabel(r'Volume (m$^3$/atom)')
+    plt.ylabel(r'Total Energy (J/atom)')
+elif output_units == 'electron_volt_angstrom':
+    fit_volumes = fit_volumes * cubic_meter_to_cubic_angstrom
+    simulation_volumes = simulation_volumes * cubic_meter_to_cubic_angstrom
+    fit_total_energies = fit_total_energies * joule_to_electron_volt
+    simulation_total_energies = simulation_total_energies * joule_to_electron_volt
+    plt.xlabel(r'Volume (Å$^3$/atom)')
+    plt.ylabel(r'Total Energy (eV/atom)')
+else:
+    print("{} units not implemented".format(output_units))
+    exit()
+
 plt.plot(fit_volumes, fit_total_energies)
 plt.scatter(simulation_volumes, simulation_total_energies)
-plt.title(r'Energy Equation of State for ' + structure_name + ' ' + chemical_formula)
-plt.xlabel(r'Volume (m$^3$/atom)')
-plt.ylabel(r'Total Energy (eV/atom)')
-
 plt.show()
