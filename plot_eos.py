@@ -19,6 +19,7 @@ number_of_atoms = 1
 chemical_formula = 'Cu'
 exchange_correlation = 'PZ'
 filename = chemical_formula + '.' + structure_name + '.' + exchange_correlation + '.volume_total_energy.dat'
+atomic_filename = chemical_formula + '.atom.' + exchange_correlation + '.dat'
 
 # Parameters
 number_of_fit_volumes = 50
@@ -32,6 +33,10 @@ with open(filename) as eos_file:
         simulation_volumes.append(float(line.split()[0]))
         simulation_total_energies.append(float(line.split()[1]))
 
+with open(atomic_filename) as atomic_file:
+    for line_index, line in enumerate(atomic_file.readlines()):
+        atomic_energy = float(line.split()[0])
+
 # Convert lists to NumPy arrays
 simulation_volumes = np.asarray(simulation_volumes)
 simulation_total_energies = np.asarray(simulation_total_energies)
@@ -39,6 +44,7 @@ simulation_total_energies = np.asarray(simulation_total_energies)
 # Convert units
 simulation_volumes = simulation_volumes * cubic_bohr_to_cubic_meter
 simulation_total_energies = simulation_total_energies * rydberg_to_joule
+atomic_energy *= rydberg_to_joule
 
 # Convert to units per atom
 simulation_volumes, simulation_total_energies = simulation_volumes/number_of_atoms, \
@@ -48,6 +54,8 @@ print("Simulation volumes (m^3/atom):")
 print(simulation_volumes)
 print("Simulation total energies (J/atom):")
 print(simulation_total_energies)
+print("Atomic total energy (J/atom):")
+print(atomic_energy)
 
 # from Cohen et al. (2000) Accuracy of equation-of-state formulations
 #
@@ -74,11 +82,13 @@ elif fit_function == 'vinet':
     from equations_of_state import vinet
     parameters = fit_eos(simulation_volumes, simulation_total_energies, vinet)
     print("Vinet equation of state parameters found:")
-    print("\tEquilibrium energy      (J/atom)   = {}".format(parameters[0]))
-    print("\tBulk modulus            (Pa)       = {}".format(parameters[1]))
-    print("\tBulk modulus derivative            = {}".format(parameters[2]))
-    print("\tEquilibrium volume      (m^3/atom) = {}".format(parameters[3]))
+    print("\tEquilibrium energy      (J/atom)   = {:.3e}".format(parameters[0]))
+    print("\tBulk modulus            (Pa)       = {:.3e}".format(parameters[1]))
+    print("\tBulk modulus derivative            = {:.3e}".format(parameters[2]))
+    print("\tEquilibrium volume      (m^3/atom) = {:.3e}".format(parameters[3]))
     fit_total_energies = vinet(parameters, fit_volumes)
+    cohesive_energy = -1*(parameters[0] - atomic_energy) * joule_to_electron_volt
+    print("\tCohesive energy         (eV/atom)  = {:.3f}".format(cohesive_energy))
 
 # Make plot
 # plt.title(r'Energy Equation of State for ' + structure_name + ' ' + chemical_formula)

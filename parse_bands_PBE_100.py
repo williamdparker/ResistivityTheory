@@ -104,5 +104,5 @@ plt.text(kpoint_plotvalues[-1] + whitespace_shift, 0.0, r'$E_F$', verticalalignm
 
 # Make the bands plot
 for band_index in range(0, number_of_bands-1):
-    plt.plot(kpoint_plotvalues, bands[band_index]) # WARNING: ASSUMING BANDS ARE ORDERED BY ENERGY, SHOULD USE .RAP FILE
+    plt.plot(kpoint_plotvalues, bands[band_index], color='green') # WARNING: ASSUMING BANDS ARE ORDERED BY ENERGY, SHOULD USE .RAP FILE
 plt.savefig('Cu.Fm-3m.PBE.bands_100_sample.png')
