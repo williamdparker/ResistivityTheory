@@ -1,0 +1,6 @@
+&bands
+  prefix='Cu.Fm-3m',
+  outdir='./'
+  filband='Cu.Fm-3m.band'
+  lsym=.true.,
+ /

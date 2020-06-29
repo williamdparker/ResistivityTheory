@@ -1,0 +1,19 @@
+&input
+  asr = 'simple',
+  flfrc='Cu.Fm-3m.fc'
+  flfrq='Cu.Fm-3m.freq'
+  q_in_band_form = .true.
+/
+12
+   gG 10
+   X  10
+   W  10
+   K  10
+   gG 10
+   L  10
+   U  10
+   W  10
+   L  10  
+   K  1
+   U  10
+   gG 1

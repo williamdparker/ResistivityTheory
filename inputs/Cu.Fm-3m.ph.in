@@ -1,0 +1,12 @@
+Phonons of fcc Cu 
+ &inputph
+  tr2_ph   = 1.0d-14,
+  prefix   = 'Cu.Fm-3m',
+  ldisp    = .true.,
+  nq1      = 8,
+  nq2      = 8,
+  nq3      = 8,
+  outdir   = '.',
+  amass(1) = 28.08,
+  fildyn   = 'Cu.Fm-3m.dyn',
+ /

@@ -1,0 +1,5 @@
+&input
+  fildyn = 'Cu.Fm-3m.dyn',
+  zasr   = 'simple',
+  flfrc  = 'Cu.Fm-3m.fc',
+/

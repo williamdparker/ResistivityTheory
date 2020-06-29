@@ -1,0 +1,46 @@
+ &control
+    pseudo_dir        = '/share/pseudo'
+    calculation       = 'scf'
+    title             = 'Variable-cell relax of fcc Cu using PZ'
+    verbosity         = 'low'
+    nstep             = 50          ! max. number of relax steps
+    tstress           = .true.
+    tprnfor           = .true.
+    outdir            = './'
+    prefix            = 'Cu.Fm-3m'
+    max_seconds       = 1.00d7      ! max. calc. time = 115 days
+    etot_conv_thr     = 7.35d-04    ! 10 meV = 1.6 zJ
+    forc_conv_thr     = 1.94d-03    ! 100 meV / angstrom = 160 pN
+ /
+ &system
+    ibrav             = 2
+    celldm(1)         = 6.671991
+    nat               = 1
+    ntyp              = 1
+    nbnd              = 11          ! 2 * Zval in UPF file
+    ecutwfc           = 80.0
+    ecutrho           = 640.0
+    occupations       = 'smearing'
+    degauss           = 2.50d-02
+    smearing          = 'gaussian'
+    nspin             = 1
+    assume_isolated   = 'none'      ! periodic in all directions
+ /
+ &electrons
+    electron_maxstep  = 500
+    scf_must_converge = .true.
+    conv_thr          = 1.00d-12
+    adaptive_thr      = .false.
+    mixing_mode       = 'plain'
+    mixing_beta       = 7.00d-01
+    mixing_ndim       = 8
+    diagonalization   = 'david'
+    startingpot       = 'atomic'
+    startingwfc       = 'atomic+random'
+ /
+ATOMIC_SPECIES
+ Cu 63.546  Cu.pz-dn-kjpaw_psl.0.2.UPF
+ATOMIC_POSITIONS crystal
+ Cu 0.000000000 0.000000000 0.000000000 0 0 0 
+K_POINTS AUTOMATIC
+14 14 14 1 1 1
