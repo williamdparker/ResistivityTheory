@@ -14,12 +14,12 @@
  /
  &system
     ibrav             = 2
-    celldm(1)         = 6.671991
+    celldm(1)         = 6.873    
     nat               = 1
     ntyp              = 1
     nbnd              = 11          ! 2 * Zval in UPF file
-    ecutwfc           = 80.0
-    ecutrho           = 640.0
+    ecutwfc           = 90.0
+    ecutrho           = 360.0
     occupations       = 'smearing'
     degauss           = 2.50d-02
     smearing          = 'gaussian'
