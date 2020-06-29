@@ -52,7 +52,7 @@
     cell_dofree       = 'all'
  /
 ATOMIC_SPECIES
- Cu 63.546  Cu.pz-dn-kjpaw_psl.0.2.UPF
+ Cu 63.546  Cu_pbe_v1.2.uspp.F.UPF
 ATOMIC_POSITIONS crystal
  Cu 0.000000000 0.000000000 0.000000000 0 0 0 
 K_POINTS AUTOMATIC
