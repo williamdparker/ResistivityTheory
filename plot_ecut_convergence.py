@@ -7,7 +7,7 @@ from scipy.special import lambertw
 fudge_factor = 1. + 0.0e-6
 
 # File from which to read data (should contain only [ecutwfc] [total energy])
-filename = 'Cu.Fm-3m.PZ.ecutwfc_totalenergy.dat'
+filename = 'Cu.Fm-3m.PBE.USPP.ecutwfc_totalenergy.dat'
 
 # Range over which to plot
 total_energy_range = 1.e-1  # eV

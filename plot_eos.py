@@ -106,6 +106,17 @@ else:
     print("{} units not implemented".format(output_units))
     exit()
 
+# Formatting future points
+#   x-range = 210% of max(V_0 - V_max, V_0 - V_min) centered at V_0
+#   y-range = 160% of max(E(V_max)-E(V_0), E(V_min)-E(V_0)) centered in middle
+#   Data summary to right of plot   E_coh,0 = ... eV/atom
+#                                   V_0     = ... Å^3/atom
+#                                   K_0     = ... GPa
+#                                   K_0'    = ...
+
+
+
+
 plt.plot(fit_volumes, fit_total_energies)
 plt.scatter(simulation_volumes, simulation_total_energies)
 plt.show()
