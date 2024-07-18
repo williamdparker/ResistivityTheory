@@ -47,9 +47,11 @@ thermaldatatable = thermaldatatable[sorted]
 for X in range(0, 104):
     for Y in range(0, 78):
         if thermaldatatable[X, 0] == electricaldatatable[Y, 0]:
-            conductivitytemp = [thermaldatatable[X, 0], thermaldatatable[X, 1], electricaldatatable[Y, 1]]
-#            print(conductivitytemp)
+            conductivitytemp = [int(thermaldatatable[X, 0]), float(thermaldatatable[X, 1]), float(electricaldatatable[Y, 1])]
             completedatatable.append(conductivitytemp)
         else:
             pass
-print(completedatatable)
+completedatatable = np.array(completedatatable)
+#print(completedatatable.transpose()[1])
+plt.plot(completedatatable.transpose()[1], completedatatable.transpose()[2], marker='o', linestyle='')
+plt.show()
