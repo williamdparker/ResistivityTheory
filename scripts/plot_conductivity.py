@@ -2,31 +2,40 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-import matplotlib
-
 
 #matplotlib.use('macosx')
 
-electricaldatatable = pd.read_html("https://www.angstromsciences.com/elements-electrical-conductivity")[0]
-thermaldatatable = pd.read_html("https://www.angstromsciences.com/thermal-conductivity-of-elements")[0]
+#electricaldatatable = pd.read_html("https://web.archive.org/web/20240615151247/https://angstromsciences.com/elements-electrical-conductivity")[0]
+#thermaldatatable = pd.read_html("https://web.archive.org/web/20240522173048/https://www.angstromsciences.com/thermal-conductivity-of-elements")[0]
 
 #print(thermaldatatable)
 
 
-electricaldatatable['Electrical Conductivity'] = electricaldatatable['Electrical Conductivity'].str.split().str[0]
-thermaldatatable['Thermal Conductivity'] = thermaldatatable['Thermal Conductivity'].str.split().str[0]
+#electricaldatatable['Electrical Conductivity'] = electricaldatatable['Electrical Conductivity'].str.split().str[0]
+#thermaldatatable['Thermal Conductivity'] = thermaldatatable['Thermal Conductivity'].str.split().str[0]
 completedatatable = []
 remove = [1, 2]
-electricaldatatable = electricaldatatable.to_numpy()
-electricaldatatable = np.delete(electricaldatatable, remove, axis=1)
-thermaldatatable = thermaldatatable.to_numpy()
-thermaldatatable = np.delete(thermaldatatable, remove, axis=1)
-electricaldatatable = np.fliplr(electricaldatatable)
-thermaldatatable = np.fliplr(thermaldatatable)
-sorted = np.argsort(electricaldatatable[:, 0])
-electricaldatatable = electricaldatatable[sorted]
-sorted = np.argsort(thermaldatatable[:, 0])
-thermaldatatable = thermaldatatable[sorted]
+#electricaldatatable = electricaldatatable.to_numpy()
+#electricaldatatable = np.delete(electricaldatatable, remove, axis=1)
+#thermaldatatable = thermaldatatable.to_numpy()
+#thermaldatatable = np.delete(thermaldatatable, remove, axis=1)
+#electricaldatatable = np.fliplr(electricaldatatable)
+#thermaldatatable = np.fliplr(thermaldatatable)
+from import_data_from_csv import import_csv_data
+thermaldatatable = import_csv_data(r"C:\Users\Owner\PycharmProjects\ResistivityTheory\inputs\Thermal_Conductivity.csv")
+electricaldatatable = import_csv_data(r"C:\Users\Owner\PycharmProjects\ResistivityTheory\inputs\Electrical_Conductivity.csv")
+sorted = np.argsort([pair[0] for pair in electricaldatatable])
+templist = []
+for atomicnumberindex in sorted:
+    templist.append(electricaldatatable[atomicnumberindex])
+electricaldatatable = np.array(templist)
+#print(templist)
+#exit()
+templist = []
+sorted = np.argsort([pair[0] for pair in thermaldatatable])
+for atomicnumberindex in sorted:
+    templist.append(thermaldatatable[atomicnumberindex])
+thermaldatatable = np.array(templist)
 #print(electricaldatatable)
 #print(thermaldatatable)
 #for x in thermaldatatable[:, 0]:
@@ -93,5 +102,6 @@ plt.yscale('log')
 
 plt.xlabel(r'$\kappa$ [W/(m K)]')
 plt.ylabel(r'$\sigma$ [S/m]')
-
+plt.savefig("plot_conductivity.png")
 plt.show()
+
